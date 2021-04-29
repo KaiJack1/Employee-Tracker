@@ -1,51 +1,80 @@
-DROP DATABASE IF EXISTS employee.js;
-CREATE DATABASE employee.js;
-USE employee.js;
+--CREATING OUR DATABASE --
+DROP DATABASE IF EXISTS employee_trackerDB;
+
+CREATE DATABASE employee_trackerDB;
+
+USE employee_trackerDB;
+
+-- DEPARTMENT TABLE ----
 CREATE TABLE department (
-  id INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(30) UNIQUE NOT NULL 
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(30)
+ 
 );
-CREATE TABLE employees(
-  id INT UNSIGNED  AUTO_INCREMENT, PRIMARY KEY,
-  first_name VARCHAR(30) NOT NULL,
-  last_name VARCHAR(30) NOT NULL,
-  status_id INT UNSIGNED NOT NULL,
-  INDEX status_ind (status_id),
-  CONSTRAINT fk_status FOREIGN KEY (status_id) REFERENCES status(id) ON DELETE CASCADE ,
-  managers_id INT UNSIGNED,
-  INDEX man_ind (managers_id),
-  CONSTRAINT fk_managers FOREIGN KEY (managers_id) REFERENCES employees(id) ON DELETE SET NULL
+-- DEPARTMENT TABLE ----
+CREATE TABLE role (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(30),
+  salary DECIMAL,
+  department_id INT,
+  FOREIGN KEY (department_id) REFERENCES department(id)
+);
+-- EMPLOYEE ROLE TABLE ----
+CREATE TABLE employee (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(30),
+  last_name VARCHAR(30),
+  manager_id INT,
+  role_id INT,
+  FOREIGN KEY (role_id) REFERENCES role(id),
+  FOREIGN KEY (manager_id) REFERENCES employee(id)
+
 );
 
-CREATE TABLE status (
-  id INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(30) UNIQUE NOT NULL,
-  department_id INT UNSIGNED NOT NULL,
-  INDEX dep_ind (department_id),
-  CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
-);
+-- DEPARTMENT SEEDS -----
+INSERT INTO department (name)
+VALUE ("Sales");
+INSERT INTO department (name)
+VALUE ("Engineering");
+INSERT INTO department (name)
+VALUE ("Finance");
+INSERT INTO department (name)
+VALUE ("Legal");
 
-use employees;
-INSERT INTO department
-(name)
-VALUES
-('Human resources'),
-('Marketing'),
-('Seniors')
-('Assistants');
+-- EMPLOYEE ROLE SEEDS -------
+INSERT INTO role (title, salary, department_id)
+VALUE ("Lead Engineer", 150000, 2);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Legal Team Lead", 250000, 4);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Accountant", 125000, 3);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Sales Lead", 100000, 1);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Salesperson", 80000, 1);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Software Engineer", 120000, 2);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Lawyer", 190000, 4);
 
-INSERT INTO status
-(title, department_id)
-VALUES 
-('GM',)
-('VP')
-('SVP')
-('CFO')
-INSERT INTO employees
-(first_name, last_name, status_id, managers_id)
+-- EMPLOYEE SEEDS -------
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Jessica", "Haze", null, 1);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Tiffany", "Patric", null, 2);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Mia","Lam",null,3);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Bently", "Lao", 1, 4);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Chris", "Melby", 4, 5);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Jason", "Baker", 1, 6);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Tom", "Nice", 2, 7);
 
-VALUES 
-('Kendra', 'Newton', 1, NOT NULL),
-('Jason', 'Livington',2 NOT NULL),
-('Austin', 'Goldman',3 NOT NULL),
-('Jenna', 'Clearwater',4 NOT NULL),
+-- SELECTING FOR CREATING 
+--TABLES IN OUR SQL WORKBENCH 
+SELECT * FROM department;
+SELECT * FROM role;
+SELECT * FROM employee;
